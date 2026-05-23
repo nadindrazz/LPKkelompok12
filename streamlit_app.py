@@ -20,8 +20,7 @@ st.set_page_config(
 st.title("🌡️ Lab Environment Monitoring System")
 
 st.write(
-    "Aplikasi monitoring suhu, kelembapan, dan tekanan "
-    "laboratorium berbasis Python dan Streamlit."
+    "Aplikasi monitoring suhu, kelembapan, dan tekanan laboratorium."
 )
 
 st.divider()
@@ -49,17 +48,7 @@ if "data" not in st.session_state:
     )
 
 # ==========================================
-# SIMULASI DATA SENSOR
-# ==========================================
-
-suhu = random.randint(22, 35)
-kelembapan = random.randint(40, 90)
-tekanan = random.randint(990, 1020)
-
-waktu = datetime.now().strftime("%H:%M:%S")
-
-# ==========================================
-# SIMPAN DATA
+# BUTTON REFRESH
 # ==========================================
 
 if st.button("🔄 Refresh Data"):
@@ -84,8 +73,23 @@ if st.button("🔄 Refresh Data"):
 
     st.session_state.data = st.session_state.data.tail(max_data)
 
-# Batasi jumlah data
-st.session_state.data = st.session_state.data.tail(max_data)
+# ==========================================
+# TAMPILAN DATA TERAKHIR
+# ==========================================
+
+if not st.session_state.data.empty:
+
+    latest = st.session_state.data.iloc[-1]
+
+    suhu = latest["Suhu"]
+    kelembapan = latest["Kelembapan"]
+    tekanan = latest["Tekanan"]
+
+else:
+
+    suhu = 0
+    kelembapan = 0
+    tekanan = 0
 
 # ==========================================
 # DASHBOARD
@@ -95,20 +99,9 @@ st.subheader("📊 Dashboard Monitoring")
 
 col1, col2, col3 = st.columns(3)
 
-col1.metric(
-    "🌡️ Suhu",
-    f"{suhu} °C"
-)
-
-col2.metric(
-    "💧 Kelembapan",
-    f"{kelembapan} %"
-)
-
-col3.metric(
-    "🌪️ Tekanan",
-    f"{tekanan} hPa"
-)
+col1.metric("🌡️ Suhu", f"{suhu} °C")
+col2.metric("💧 Kelembapan", f"{kelembapan} %")
+col3.metric("🌪️ Tekanan", f"{tekanan} hPa")
 
 st.divider()
 
@@ -118,7 +111,6 @@ st.divider()
 
 st.subheader("🚨 Status Laboratorium")
 
-# Status suhu
 if suhu > 30:
     st.error("⚠️ Suhu laboratorium terlalu tinggi!")
 
@@ -128,7 +120,6 @@ elif suhu < 24:
 else:
     st.success("✅ Suhu laboratorium normal")
 
-# Status kelembapan
 if kelembapan > 80:
     st.warning("⚠️ Kelembapan terlalu tinggi!")
 
@@ -146,9 +137,11 @@ st.divider()
 
 st.subheader("📈 Grafik Monitoring")
 
-chart_data = st.session_state.data.set_index("Waktu")
+if not st.session_state.data.empty:
 
-st.line_chart(chart_data)
+    chart_data = st.session_state.data.set_index("Waktu")
+
+    st.line_chart(chart_data)
 
 st.divider()
 
@@ -175,14 +168,5 @@ st.download_button(
     label="⬇️ Download Data CSV",
     data=csv,
     file_name="lab_monitoring_data.csv",
-    mime="text/csv",
-    key="download_csv"
+    mime="text/csv"
 )
-
-# ==========================================
-# REFRESH BUTTON
-# ==========================================
-
-if st.button("🔄 Refresh Data"):
-    st.rerun()
-
