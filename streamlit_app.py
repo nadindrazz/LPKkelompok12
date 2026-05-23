@@ -15,6 +15,13 @@ st.set_page_config(
 )
 
 # ==========================================
+# AUTO REFRESH
+# 10000 ms = 10 detik
+# ==========================================
+
+st_autorefresh(interval=10000, key="refresh")
+
+# ==========================================
 # JUDUL
 # ==========================================
 
@@ -26,8 +33,6 @@ st.write(
 )
 
 st.divider()
-# Auto refresh setiap 10 detik
-st_autorefresh(interval=10000, key="refresh")
 
 # ==========================================
 # SIDEBAR
@@ -171,11 +176,3 @@ st.download_button(
     mime="text/csv",
     key="download_csv"
 )
-
-# ==========================================
-# REFRESH BUTTON
-# ==========================================
-
-
-
-
