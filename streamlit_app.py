@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import random
 from datetime import datetime
-from streamlit_autorefresh import st_autorefresh
 
 # ==========================================
 # KONFIGURASI HALAMAN
@@ -13,13 +12,6 @@ st.set_page_config(
     page_icon="🌡️",
     layout="wide"
 )
-
-# ==========================================
-# AUTO REFRESH
-# 10000 ms = 10 detik
-# ==========================================
-
-st_autorefresh(interval=10000, key="refresh")
 
 # ==========================================
 # JUDUL
@@ -176,3 +168,11 @@ st.download_button(
     mime="text/csv",
     key="download_csv"
 )
+
+# ==========================================
+# REFRESH BUTTON
+# ==========================================
+
+if st.button("🔄 Refresh Data"):
+    st.rerun()
+
