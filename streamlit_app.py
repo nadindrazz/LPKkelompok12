@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import random
 from datetime import datetime
+from streamlit_autorefresh import st_autorefresh
 
 # ==========================================
 # KONFIGURASI HALAMAN
@@ -25,6 +26,8 @@ st.write(
 )
 
 st.divider()
+# Auto refresh setiap 10 detik
+st_autorefresh(interval=10000, key="refresh")
 
 # ==========================================
 # SIDEBAR
@@ -173,7 +176,6 @@ st.download_button(
 # REFRESH BUTTON
 # ==========================================
 
-if st.button("🔄 Refresh Data"):
-    st.rerun()
+
 
 
