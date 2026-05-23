@@ -62,17 +62,27 @@ waktu = datetime.now().strftime("%H:%M:%S")
 # SIMPAN DATA
 # ==========================================
 
-new_data = pd.DataFrame({
-    "Waktu": [waktu],
-    "Suhu": [suhu],
-    "Kelembapan": [kelembapan],
-    "Tekanan": [tekanan]
-})
+if st.button("🔄 Refresh Data"):
 
-st.session_state.data = pd.concat(
-    [st.session_state.data, new_data],
-    ignore_index=True
-)
+    suhu = random.randint(22, 35)
+    kelembapan = random.randint(40, 90)
+    tekanan = random.randint(990, 1020)
+
+    waktu = datetime.now().strftime("%H:%M:%S")
+
+    new_data = pd.DataFrame({
+        "Waktu": [waktu],
+        "Suhu": [suhu],
+        "Kelembapan": [kelembapan],
+        "Tekanan": [tekanan]
+    })
+
+    st.session_state.data = pd.concat(
+        [st.session_state.data, new_data],
+        ignore_index=True
+    )
+
+    st.session_state.data = st.session_state.data.tail(max_data)
 
 # Batasi jumlah data
 st.session_state.data = st.session_state.data.tail(max_data)
